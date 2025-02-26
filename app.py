@@ -6,7 +6,15 @@ import warnings
 warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
 
 
+"""
+### TO DO LIST: ###
 
+out put data into text file,
+use this text file to determine if there are any new listings
+
+
+
+"""
 
 
 ### Functions:
@@ -48,6 +56,7 @@ sorted_listings = parse_rss_feed(rss)
 
 
 
+#currently prints out the title and description of each item in the RSS feed
 
 
 for item in sorted_listings:
