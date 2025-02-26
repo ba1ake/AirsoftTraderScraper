@@ -1,4 +1,4 @@
-import bs4
+import bs4 , re
 import requests
 from lxml import etree
 from bs4 import XMLParsedAsHTMLWarning
@@ -23,16 +23,33 @@ use this text file to determine if there are any new listings
 # RSS feed URL
 url = "https://airsofttrader.co.nz/feed/?post_type=ad_listing"
 
+#seperate function to replace the tag used as a place holder for " ' "
+
+def replace_special_tag(text):
+    special_tags = ["&#8217;", "&amp;", "\n", "\t", "\r", "<p>", "</p>", "<br>", "</br>", "<br />"]  # all the tags that end up in the RSS feed
+    replacements = ["'", "&", "", "", "", "", "", "", "", "", ""]  # replacements for special tags needs to match sister array special_tags
+
+    cleaned_text = text  
+    for tag, replacement in zip(special_tags, replacements):
+        cleaned_text = re.sub(tag, replacement, cleaned_text)
+    
+    print(cleaned_text)
+    return cleaned_text
+
+
 # Fetches the RSS feed from chosen URL and returns the content using XML parser
 def fetch_rss(url):
     response = requests.get(url)
     soup = bs4.BeautifulSoup(response.content, "xml") # Changed parser to XML
     return soup
 
-def cleanup(text):
-    for char in ["\n", "\t", "\r", "<p>", "</p>", "<br>", "</br>", "<br />"]: #removes HTML tags and newlines from string
+#cleans up HTML tags in the description, needs to be intergarted into new replace_special_tag function
+#def cleanup(text): 
+    for char in ["\n", "\t", "\r", "<p>", "</p>", "<br>", "</br>", "<br>"]: #removes HTML tags and newlines from string
         text = text.replace(char, '')
-    return text
+    return replace_special_tag(text)
+
+
 
 # Parses the RSS feed and returns the title and description of each item into an array
 def parse_rss_feed(content):
@@ -40,25 +57,21 @@ def parse_rss_feed(content):
     listings = [] # 0 is title and 1 is description
     for item in items:
         title = item.find("title").text
-        description = cleanup(item.find("content:encoded").text)
-        listings.append([title, description]) #appends as single layer array
+        description = replace_special_tag(item.find("content:encoded").text)
+        listings.append([title, description])
 
     return listings
 
 
 
 
-### Main code
+### Main code ###
 
 
 rss = fetch_rss(url)
-sorted_listings = parse_rss_feed(rss)
+sorted_listings = parse_rss_feed(rss) #compliles the listings into a list of lists
 
-
-
-#currently prints out the title and description of each item in the RSS feed
-
-
-for item in sorted_listings:
+for item in sorted_listings: #prints the listings
     print(item)
     print("\n\n\n")
+    
