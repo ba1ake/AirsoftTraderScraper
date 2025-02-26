@@ -63,15 +63,13 @@ def parse_rss_feed(content):
     return listings
 
 
+#generates all the listings and will output into a text file to be read by the main program
 
+def generate_listings_all(url): 
+    rss = fetch_rss(url)
+    sorted_listings = parse_rss_feed(rss) #compliles the listings into a list of lists
 
-### Main code ###
-
-
-rss = fetch_rss(url)
-sorted_listings = parse_rss_feed(rss) #compliles the listings into a list of lists
-
-for item in sorted_listings: #prints the listings
-    print(item)
-    print("\n\n\n")
+    for item in sorted_listings: #prints the listings
+        print(item)
+        print("\n\n\n")
     
