@@ -17,15 +17,15 @@ def fetch_rss(url):
 # Parses the RSS feed and returns the title and description of each item into an array
 def parse_rss_feed(content):
     items = content.find_all("item")
-    listings = [] #need to turn into multi layer array
+    listings = [[],[]] # 0 is title and 1 is description
     for item in items:
         title = item.find("title").text
         description = item.find("description").text
-        listings.append({"title": title, "description": description}) #appends as single layer array
+        listings.append([title, description]) #appends as single layer array
 
     return listings
 
 rss = fetch_rss(url)
 sorted_listings = parse_rss_feed(rss)
 
-print(sorted_listings[1])
+print(sorted_listings[2])
