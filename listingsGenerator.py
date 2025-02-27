@@ -142,7 +142,6 @@ def get_new_listings():
         old_listings = read_from_file("oldlistings.txt")
 
     new_listings = ""
-    all_listings = []
     x=0
     for item in current_listings:
 
