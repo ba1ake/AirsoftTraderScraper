@@ -33,7 +33,12 @@ def write_to_file(content, filename): #writes the content to the file
     file.close
     #print(content)
     return True
-    
+
+def append_to_file(content, filename): #appends the content to the file
+    file = open(filename, "a", encoding="utf-8") #opens the file in append mode
+    file.write(str(content)) #content should be the full string ready to appened into datafile
+    file.close
+    return True
 
 def read_from_file(filename): #reads the content from the file
     file = open(filename, "r")
@@ -130,21 +135,20 @@ old_listings = read_from_file("oldlistings.txt")
 
 #check_new_listings(current_listings[0], old_listings)
 if old_listings == False: # if not lissings are found in the old listings file
-    for x in current_listings:
-        new_listings = str(x) + "\n"
-    write_to_file(new_listings, "oldlistings.txt")
+    write_to_file('["void","void"]'+ "\n", "oldlistings.txt") #creates a void listing to be used as a base so that the script doesnt throw an error on line 106
     print("empty file")
-else:
-    new_listings = ""
-    all_listings = []
-    x=0
-    for item in current_listings:
+    old_listings = read_from_file("oldlistings.txt")
+
+new_listings = ""
+all_listings = []
+x=0
+for item in current_listings:
         #print(x[0])
-        if check_new_listings(item[0], old_listings):
-            new_listings += str(current_listings[x]) + "\n"
+    if check_new_listings(item[0], old_listings):
+        new_listings += str(item) + "\n"
             #old_listings.append(current_listings[x])
             #print("new listing found")
             #print(x[0])
-        x+=1
-    
-    write_to_file(new_listings, "oldlistings.txt") #updates the old listings file with the new listings DO LAST
+x+=1
+print(new_listings)
+append_to_file(new_listings, "oldlistings.txt") #updates the old listings file with the new listings DO LAST
