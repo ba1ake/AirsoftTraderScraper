@@ -12,16 +12,16 @@ How it works:
 
 program broken up into 2 different parts:
 
-    first part handles all the RSS feed calls and requests, and then puts the title, and description of the listing in an Array which is then pasted into newlistings.txt
+first part handles all the RSS feed calls and requests, and then puts the title, and description of the listing in an Array which is then pasted into newlistings.txt
 
-    this is then compared to prevoius listings to ensure no duplicates, and then any "new" listings are returned but the airsofttrader.get_new_listings function. which currently returns 2 parts, first being a string of data, ineffeicent currently but works, and then an array of Urls for the images.
+this is then compared to prevoius listings to ensure no duplicates, and then any "new" listings are returned but the airsofttrader.get_new_listings function. which currently returns 2 parts, first being a string of data, ineffeicent currently but works, and then an array of Urls for the images.
 
 
-    this is then handled by the second part (BotCode.py)
+this is then handled by the second part (BotCode.py)
 
-    this handles discord connection, then will check ~ 5 mins for new listings, if it finds them itll slowly send them to the channel (you will need to configure this)
+this handles discord connection, then will check ~ 5 mins for new listings, if it finds them itll slowly send them to the channel (you will need to configure this)
 
-    if a listing does not happen in ~ 2 hours, the program will post a meassage in the chat saying something untill it gets a new listing.
+if a listing does not happen in ~ 2 hours, the program will post a meassage in the chat saying something untill it gets a new listing.
 
 
 
