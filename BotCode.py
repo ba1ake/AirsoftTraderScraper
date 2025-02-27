@@ -5,7 +5,7 @@ import airsofttrader  # Custom library for this project
 from discord import Embed
 
 # Replace this with your actual bot token
-TOKEN = "Hidden"
+TOKEN = "Hidden" 
 
 # Set up bot permissions
 intents = discord.Intents.default()
@@ -25,7 +25,7 @@ async def check_airsoft_listings(time_quiet=time_quiet):
 
     if channel:
         listing_url = []
-        listing, listing_url = listingGenerator.get_new_listings()  # Fetch new listings
+        listing, listing_url = airsofttrader.get_new_listings()  # Fetch new listings
         if listing:
             items = listing.strip().split("\n")  # Convert data into a list
             print(items[1])
@@ -58,7 +58,7 @@ async def check_airsoft_listings(time_quiet=time_quiet):
                 embed.set_thumbnail(url=embed_author_icon_url)
 
                 # Send the embed message to the Discord channel
-                listingGenerator.append_to_file("new listing found and posted @ " + str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())), "outputlog.txt")
+                airsofttrader.append_to_file("new listing found and posted @ " + str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())), "outputlog.txt")
                 await channel.send(embed=embed)
                 time.sleep(60)  # Prevents discord hating us for spam and if multiple listings are found at once release them steedly
 
@@ -76,9 +76,9 @@ async def check_airsoft_listings(time_quiet=time_quiet):
             time_quiet += 1
             if time_quiet == 12*2: # 12*2 is 2 hours
                 await channel.send("The bot has been quiet for a while, consider posting a listing online!")
-                listingGenerator.append_to_file("no new listings @ " + str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())) + " lets send some ecourgement!","outputlog.txt")
+                airsofttrader.append_to_file("no new listings @ " + str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())) + " lets send some ecourgement!","outputlog.txt")
                 time_quiet = 0
-            listingGenerator.append_to_file("no new listings @ " + str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())),"outputlog.txt")
+            airsofttrader.append_to_file("no new listings @ " + str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())),"outputlog.txt")
 
 @client.event
 async def on_ready():
