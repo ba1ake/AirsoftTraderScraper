@@ -31,7 +31,7 @@ def write_to_file(content, filename): #writes the content to the file
     file = open(filename, "w", encoding="utf-8") #opens the file in write mode
     file.write(str(content)) #content should be the full string ready to appened into datafile
     file.close
-    print(content)
+    #print(content)
     return True
     
 
@@ -41,9 +41,11 @@ def read_from_file(filename): #reads the content from the file
     file_contents = file.readlines()
     for line in file_contents:
         parts = line.split(",") #splits the line into parts
+        #print(parts)
         title, description = parts[0], parts[1] #assigns the parts to variables
         file_contents_array.append([title, description]) #appends the parts to the array
-
+    if len(file_contents_array) == 0:
+        return False #means when compared itll be seen as new
     return file_contents_array
 
 #removes tags that arent plain text
@@ -98,7 +100,7 @@ def generate_listings_all(url):
         title = item[0]
         description = item[1]
         complete_listings.append([title, description])
-        plain_text += str(title) + "," + str(description) + "\n"
+        plain_text += str(complete_listings[len(complete_listings)-1]) + "\n"
     write_to_file(plain_text, "newlistings.txt") #writes the listings to a file
     #print(plain_text)
     return(complete_listings)
@@ -107,13 +109,13 @@ def generate_listings_all(url):
 
 
 def check_new_listings(current_listing_item, old_listings):
-    time.sleep(3)
+    #time.sleep(3)
     for old_listing_item in old_listings:
         if current_listing_item == old_listing_item[0]:
-            print("duplicate listing found")
+            #print("duplicate listing found")
             return False
     #print("new listing found")  
-    print(current_listing_item)  
+    #print(current_listing_item)  
     return True
 
     
@@ -126,8 +128,23 @@ def check_new_listings(current_listing_item, old_listings):
 current_listings = generate_listings_all(url) #creates the current listings as an array
 old_listings = read_from_file("oldlistings.txt") 
 
-#print(current_listings)
-
-
-
-
+#check_new_listings(current_listings[0], old_listings)
+if old_listings == False: # if not lissings are found in the old listings file
+    for x in current_listings:
+        new_listings = str(x) + "\n"
+    write_to_file(new_listings, "oldlistings.txt")
+    print("empty file")
+else:
+    new_listings = ""
+    all_listings = []
+    x=0
+    for item in current_listings:
+        #print(x[0])
+        if check_new_listings(item[0], old_listings):
+            new_listings += str(current_listings[x]) + "\n"
+            #old_listings.append(current_listings[x])
+            #print("new listing found")
+            #print(x[0])
+        x+=1
+    
+    write_to_file(new_listings, "oldlistings.txt") #updates the old listings file with the new listings DO LAST
