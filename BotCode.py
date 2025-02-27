@@ -60,6 +60,7 @@ async def check_airsoft_listings(time_quiet=time_quiet):
                 # Send the embed message to the Discord channel
                 airsofttrader.append_to_file("new listing found and posted @ " + str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())), "outputlog.txt")
                 await channel.send(embed=embed)
+                time_quiet = 0
                 time.sleep(60)  # Prevents discord hating us for spam and if multiple listings are found at once release them steedly
 
 
