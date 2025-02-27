@@ -1,0 +1,15 @@
+Task exception was never retrieved
+future: <Task finished coro=<check_airsoft_listings() done, defined at bot.py:21> exception=FeatureNotFound("Couldn't find a tree builder with the features you requested: xml. Do you need to install a parser library?",)>
+Traceback (most recent call last):
+  File "bot.py", line 28, in check_airsoft_listings
+    listing, listing_url = airsofttrader.get_new_listings()  # Fetch new listings
+  File "/root/DiscordBot/airsofttrader.py", line 194, in get_new_listings
+    current_listings, all_urls = generate_listings_all(url) #creates the current listings as an array
+  File "/root/DiscordBot/airsofttrader.py", line 111, in generate_listings_all
+    rss = fetch_rss(url)
+  File "/root/DiscordBot/airsofttrader.py", line 79, in fetch_rss
+    soup = bs4.BeautifulSoup(response.content, "xml") # Changed parser to XML
+  File "/usr/local/lib/python3.6/site-packages/bs4/__init__.py", line 253, in __init__
+    % ",".join(features))
+bs4.FeatureNotFound: Couldn't find a tree builder with the features you requested: xml. Do you need to install a parser library?
+Logged in as AirSoftTrader#4775

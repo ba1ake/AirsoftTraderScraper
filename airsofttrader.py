@@ -32,7 +32,7 @@ def write_to_file(content, filename): #writes the content to the file
 
     file = open(filename, "w", encoding="utf-8") #opens the file in write mode
     file.write(str(content)) #content should be the full string ready to appened into datafile
-    file.close
+    file.close()
     #print(content)
     return True
 
@@ -40,7 +40,7 @@ def append_to_file(content, filename): #appends the content to the file
 
     file = open(filename, "a", encoding="utf-8") #opens the file in append mode
     file.write(str(content)) #content should be the full string ready to appened into datafile
-    file.close
+    file.close()
     return True
 
 def read_from_file(filename): #reads the content from the file
@@ -57,6 +57,7 @@ def read_from_file(filename): #reads the content from the file
 
     if len(file_contents_array) == 0:
         return False #means when compared itll be seen as new
+    file.close()
     return file_contents_array
 
 #removes tags that arent plain text
