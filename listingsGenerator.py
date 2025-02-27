@@ -113,42 +113,45 @@ def generate_listings_all(url):
 #def check_new_listings():
 
 
-def check_new_listings(current_listing_item, old_listings):
-    #time.sleep(3)
+
+#this needs to remove the ['' from the string for "current_listing_item"" 
+
+def check_new_listings(current_listing_item, old_listings): 
+    time.sleep(1)
     for old_listing_item in old_listings:
-        if current_listing_item == old_listing_item[0]:
-            #print("duplicate listing found")
+        old_listing_item_str = str(old_listing_item[0])
+        old_listing_item_str = old_listing_item_str[2:-1]
+        if current_listing_item == old_listing_item_str:
+            print("duplicate listing found")
             return False
     #print("new listing found")  
     #print(current_listing_item)  
     return True
 
     
-    
 
 
- 
 
-### Main Program: ### testig purposes to be removed in final realease
-current_listings = generate_listings_all(url) #creates the current listings as an array
-old_listings = read_from_file("oldlistings.txt") 
+def get_new_listings():
+    current_listings = generate_listings_all(url) #creates the current listings as an array
+    old_listings = read_from_file("oldlistings.txt") 
 
-#check_new_listings(current_listings[0], old_listings)
-if old_listings == False: # if not lissings are found in the old listings file
-    write_to_file('["void","void"]'+ "\n", "oldlistings.txt") #creates a void listing to be used as a base so that the script doesnt throw an error on line 106
-    print("empty file")
-    old_listings = read_from_file("oldlistings.txt")
+    if old_listings == False: # if not lissings are found in the old listings file
+        write_to_file('["void","void"]'+ "\n", "oldlistings.txt") #creates a void listing to be used as a base so that the script doesnt throw an error on line 106
+        print("empty file")
+        old_listings = read_from_file("oldlistings.txt")
 
-new_listings = ""
-all_listings = []
-x=0
-for item in current_listings:
-        #print(x[0])
-    if check_new_listings(item[0], old_listings):
-        new_listings += str(item) + "\n"
-            #old_listings.append(current_listings[x])
-            #print("new listing found")
-            #print(x[0])
-x+=1
-print(new_listings)
-append_to_file(new_listings, "oldlistings.txt") #updates the old listings file with the new listings DO LAST
+    new_listings = ""
+    all_listings = []
+    x=0
+    for item in current_listings:
+
+        if check_new_listings(item[0], old_listings):
+            new_listings += str(item) + "\n"
+
+    x+=1
+    print(new_listings)
+    append_to_file(new_listings, "oldlistings.txt") #updates the old listings file with the new listings DO LAST
+
+
+get_new_listings()
