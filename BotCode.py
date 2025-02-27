@@ -23,7 +23,7 @@ async def check_airsoft_listings(time_quiet=time_quiet):
     await client.wait_until_ready()  # Ensure bot is connected before running the loop
     channel = client.get_channel(1311228804877914163)
 
-    if channel:
+    while channel:
         listing_url = []
         listing, listing_url = airsofttrader.get_new_listings()  # Fetch new listings
         if listing:
@@ -67,12 +67,10 @@ async def check_airsoft_listings(time_quiet=time_quiet):
             # if the release takes longer than 5 minutes, the bot will wont 5 minutes before checking again
             if len(items) > 5:
                 pass
-            if len(items) == 0:
-                time.sleep(300) #avoids divison by 0 error
             else:
                 time.sleep(300 - (len(items) * 5)) # Check listings every 5 minutes if there are more than 5 listings then It will take away the time taken to print the listings from its 5 minute pause
         else:
-            print("no listings found")
+            print("no listings found sleeping")
             to_quiet = True
             time_quiet += 1
             if time_quiet == 12*2: # 12*2 is 2 hours
@@ -80,20 +78,13 @@ async def check_airsoft_listings(time_quiet=time_quiet):
                 airsofttrader.append_to_file("no new listings @ " + str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())) + " lets send some ecourgement!","outputlog.txt")
                 time_quiet = 0
             airsofttrader.append_to_file("no new listings @ " + str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())),"outputlog.txt")
+            time.sleep(300)
 
 @client.event
 async def on_ready():
-    """Executes when the bot successfully connects to Discord."""
-    print(f"Logged in as {client.user}")
-    
-    # Uncomment this if you want the bot to send a startup message
-    # channel = client.get_channel(1311227735104028695)
-    # if channel:
-    #     await channel.send("Hello! The bot is now working")
 
-    # Start the background task to check listings periodically
     client.loop.create_task(check_airsoft_listings())
-
+    print("done lol")
 
 # Run the bot
 client.run(TOKEN)
