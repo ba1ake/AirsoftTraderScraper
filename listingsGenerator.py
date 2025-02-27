@@ -28,13 +28,11 @@ def load_files():
 
 
 def write_to_file(content, filename): #writes the content to the file
-    try:
-        file = open(filename, "w")
-        file.write(content) #content should be the full string ready to appened into datafile
-        file.close
-        return True
-    except:
-        return False
+    file = open(filename, "w", encoding="utf-8") #opens the file in write mode
+    file.write(str(content)) #content should be the full string ready to appened into datafile
+    file.close
+    print(content)
+    return True
     
 
 def read_from_file(filename): #reads the content from the file
@@ -51,8 +49,8 @@ def read_from_file(filename): #reads the content from the file
 #removes tags that arent plain text
 
 def replace_special_tag(text):
-    special_tags = ["&#8217;", "&amp;", "\n", "\t", "\r", "<p>", "</p>", "<br>", "</br>", "<br />"]  # all the tags that end up in the RSS feed
-    replacements = ["'", "&", "", "", "", "", "", "", "", "", ""]  # replacements for special tags needs to match sister array special_tags
+    special_tags = ["&#8217;", "&amp;", "\n", "\t", "\r", "<p>", "</p>", "<br>", "</br>", "<br />","\x84"]  # all the tags that end up in the RSS feed
+    replacements = ["'", "&", "", "", "", "", "", "", "", "", "",""]  # replacements for special tags needs to match sister array special_tags
     cleaned_text = text  
     for tag, replacement in zip(special_tags, replacements):
         cleaned_text = re.sub(tag, replacement, cleaned_text)
@@ -95,14 +93,14 @@ def generate_listings_all(url):
     rss = fetch_rss(url)
     sorted_listings = parse_rss_feed(rss) #compiles the listings into a list of lists
     complete_listings = [] #list to be written to the file
+    plain_text = ""
     for item in sorted_listings: #prints the listings
         title = item[0]
         description = item[1]
         complete_listings.append([title, description])
-        print(title)
-        print("\n\n\n")
-        print(description)
-    write_to_file(str(complete_listings), "newlistings.txt") #writes the listings to a file
+        plain_text += str(title) + "," + str(description) + "\n"
+    write_to_file(plain_text, "newlistings.txt") #writes the listings to a file
+    #print(plain_text)
     return(complete_listings)
     
 #def check_new_listings():
