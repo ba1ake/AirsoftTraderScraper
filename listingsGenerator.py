@@ -153,4 +153,4 @@ def get_new_listings():
     append_to_file(new_listings, "oldlistings.txt") #updates the old listings file with the new listings DO LAST
 
 
-get_new_listings()
+#get_new_listings()
