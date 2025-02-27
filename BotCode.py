@@ -61,14 +61,14 @@ async def check_airsoft_listings(time_quiet=time_quiet):
                 airsofttrader.append_to_file("new listing found and posted @ " + str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())), "outputlog.txt")
                 await channel.send(embed=embed)
                 time_quiet = 0
-                time.sleep(60)  # Prevents discord hating us for spam and if multiple listings are found at once release them steedly
+                await asyncio.sleep(60)  # Prevents discord hating us for spam and if multiple listings are found at once release them steedly
 
 
             # if the release takes longer than 5 minutes, the bot will wont 5 minutes before checking again
             if len(items) > 5:
                 pass
             else:
-                time.sleep(300 - (len(items) * 5)) # Check listings every 5 minutes if there are more than 5 listings then It will take away the time taken to print the listings from its 5 minute pause
+                await asyncio.sleep(300 - (len(items) * 5)) # Check listings every 5 minutes if there are more than 5 listings then It will take away the time taken to print the listings from its 5 minute pause
         else:
             print("no listings found sleeping")
             to_quiet = True
@@ -78,7 +78,7 @@ async def check_airsoft_listings(time_quiet=time_quiet):
                 airsofttrader.append_to_file("no new listings @ " + str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())) + " lets send some ecourgement!","outputlog.txt")
                 time_quiet = 0
             airsofttrader.append_to_file("no new listings @ " + str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())),"outputlog.txt")
-            time.sleep(300)
+            await asyncio.sleep(300)
 
 @client.event
 async def on_ready():
