@@ -1,5 +1,5 @@
 import bs4 , re, requests
-
+import time 
 
 """
 ### TO DO LIST: ###
@@ -21,7 +21,6 @@ url = "https://airsofttrader.co.nz/feed/?post_type=ad_listing"
 
 
 
-
 def load_files():
     newlistings = open("newlistings.txt", "w")
     oldlistings = open("oldlistings.txt", "w")
@@ -38,7 +37,16 @@ def write_to_file(content, filename): #writes the content to the file
         return False
     
 
+def read_from_file(filename): #reads the content from the file
+    file = open(filename, "r")
+    file_contents_array = []
+    file_contents = file.readlines()
+    for line in file_contents:
+        parts = line.split(",") #splits the line into parts
+        title, description = parts[0], parts[1] #assigns the parts to variables
+        file_contents_array.append([title, description]) #appends the parts to the array
 
+    return file_contents_array
 
 #removes tags that arent plain text
 
@@ -85,18 +93,43 @@ def parse_rss_feed(content):
 
 def generate_listings_all(url): 
     rss = fetch_rss(url)
-    sorted_listings = parse_rss_feed(rss) #compliles the listings into a list of lists
-    complete_listings = "" #string to be written to the file
+    sorted_listings = parse_rss_feed(rss) #compiles the listings into a list of lists
+    complete_listings = [] #list to be written to the file
     for item in sorted_listings: #prints the listings
-        item_str = str(item)
-        complete_listings += (item_str + "\n\n\n")
-        print(item)
+        title = item[0]
+        description = item[1]
+        complete_listings.append([title, description])
+        print(title)
         print("\n\n\n")
-    write_to_file(complete_listings, "newlistings.txt") #writes the listings to a file
+        print(description)
+    write_to_file(str(complete_listings), "newlistings.txt") #writes the listings to a file
+    return(complete_listings)
+    
+#def check_new_listings():
+
+
+def check_new_listings(current_listing_item, old_listings):
+    time.sleep(3)
+    for old_listing_item in old_listings:
+        if current_listing_item == old_listing_item[0]:
+            print("duplicate listing found")
+            return False
+    #print("new listing found")  
+    print(current_listing_item)  
+    return True
+
+    
     
 
 
-
+ 
 
 ### Main Program: ### testig purposes to be removed in final realease
-generate_listings_all(url)
+current_listings = generate_listings_all(url) #creates the current listings as an array
+old_listings = read_from_file("oldlistings.txt") 
+
+#print(current_listings)
+
+
+
+
