@@ -1,7 +1,7 @@
 import discord
 import asyncio
 import time
-import listingsGenerator  # Custom library for this project
+import airsofttrader  # Custom library for this project
 from discord import Embed
 
 # Replace this with your actual bot token
