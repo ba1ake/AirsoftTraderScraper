@@ -23,6 +23,8 @@ this handles discord connection, then will check ~ 5 mins for new listings, if i
 
 if a listing does not happen in ~ 2 hours, the program will post a meassage in the chat saying something untill it gets a new listing.
 
+# things to note
+all txt files are optional to download, when you first delopy this bot I recomend deleteing them, that way on your first go you will get outputs into your discord. 
 
 
 # known issues:
