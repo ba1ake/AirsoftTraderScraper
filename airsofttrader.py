@@ -21,12 +21,6 @@ url = "https://airsofttrader.co.nz/feed/?post_type=ad_listing"
 
 
 
-def load_files():
-
-    newlistings = open("newlistings.txt", "w")
-    oldlistings = open("oldlistings.txt", "w")
-    return newlistings, oldlistings
-
 
 def write_to_file(content, filename): #writes the content to the file
 
@@ -76,9 +70,27 @@ def replace_special_tag(text):
 # Fetches the RSS feed from chosen URL and returns the content using XML parser
 
 def fetch_rss(url):
-    response = requests.get(url)
-    soup = bs4.BeautifulSoup(response.content, "xml") # Changed parser to XML
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+        "Referer": "https://www.google.com/",
+        "Accept-Language": "en-US,en;q=0.5"
+    }
+    session = requests.Session()
+    session.headers.update(headers)
+    
+    try:
+        response = session.get(url)
+        response.raise_for_status()  # Raise HTTPError for bad responses (4xx and 5xx)
+    except requests.exceptions.HTTPError as http_err:
+        print(f"HTTP error occurred: {http_err}")
+        return None
+    except Exception as err:
+        print(f"An error occurred: {err}")
+        return None
+
+    soup = bs4.BeautifulSoup(response.content, "xml")
     return soup
+
 
 #cleans up HTML tags in the description, needs to be intergarted into new replace_special_tag function
 #def cleanup(text): 
@@ -94,7 +106,7 @@ def parse_rss_feed(content):
     items = content.find_all("item")
     listings = []  # 0 is title and 1 is description
     links = []
-
+    print()
     for item in items:
         link = item.find("link").text
         title = item.find("title").text
@@ -110,6 +122,7 @@ def parse_rss_feed(content):
 
 def generate_listings_all(url): 
     rss = fetch_rss(url)
+    print("rss")
     listing_urls = []
     sorted_listings, listing_urls = parse_rss_feed(rss) #compiles the listings into a list of lists
     #print(listing_urls)
@@ -194,7 +207,7 @@ def get_new_listings():
     all_urls = []
     current_listings, all_urls = generate_listings_all(url) #creates the current listings as an array
     old_listings = read_from_file("oldlistings.txt") 
-
+    print("listings checked correctly, there are ", current_listings, " current listings")
     if old_listings == False: # if not lissings are found in the old listings file
         write_to_file('["void","void"]'+ "\n", "oldlistings.txt") #creates a void listing to be used as a base so that the script doesnt throw an error on line 106
         print("empty file")
