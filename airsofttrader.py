@@ -77,7 +77,6 @@ def fetch_rss(url):
     }
     session = requests.Session()
     session.headers.update(headers)
-    
     try:
         response = session.get(url)
         response.raise_for_status()  # Raise HTTPError for bad responses (4xx and 5xx)
