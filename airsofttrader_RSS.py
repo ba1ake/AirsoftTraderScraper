@@ -134,4 +134,4 @@ def get_new_listings():
     return str(new_listings), used_urls
 
 # Uncomment this line to debug
-#get_new_listings()
+get_new_listings()
