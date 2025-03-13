@@ -83,7 +83,7 @@ def generate_listings_all(url):
     return complete_listings, listing_urls
 
 def check_new_listings(current_listing_item, old_listings):
-    
+
     for old_listing_item in old_listings:
         old_listing_item_str = str(old_listing_item[0])
         old_listing_item_str = old_listing_item_str[2:-1]
@@ -93,16 +93,20 @@ def check_new_listings(current_listing_item, old_listings):
     return True
 
 def get_listing_image(url):
+
     try:
         response = requests.get(url)
         response.raise_for_status()
         soup = bs4.BeautifulSoup(response.content, 'html.parser')
         og_image = soup.find('meta', property='og:image')
+
         if og_image and og_image['content']:
             return og_image['content']
+
         images = soup.find_all('img')
         if not images:
             return "https://airsofttrader.co.nz/wp-content/uploads/2024/02/AS2024BannerOD.png"
+
         main_image_url = None
         max_area = 0
         for img in images:
@@ -110,22 +114,28 @@ def get_listing_image(url):
                 width = int(img.get('width', 0))
                 height = int(img.get('height', 0))
                 area = width * height
+
                 if area > max_area:
                     max_area = area
                     main_image_url = img['src']
+
             except (ValueError, TypeError):
                 continue
+
         return main_image_url
+
     except requests.exceptions.RequestException as e:
         print(f"Error fetching the webpage: {e}")
         return None
 
 def get_new_listings():
+
     used_urls = []
     all_urls = []
     current_listings, all_urls = generate_listings_all(url)
     old_listings = read_from_file("oldlistings.txt")
     print("listings checked correctly, there are ", current_listings, " current listings")
+    
     if old_listings == False:
         write_to_file('["void","void"]' + "\n", "oldlistings.txt")
         print("empty file")
